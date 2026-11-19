@@ -1,0 +1,11 @@
+# Données du challenge (trop lourdes / téléchargeables)
+train-images/
+test-images/
+train-images.zip
+*.csv
+
+# Python / macOS
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
