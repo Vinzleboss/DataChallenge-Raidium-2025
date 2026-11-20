@@ -1,56 +1,40 @@
-from skimage.segmentation import watershed
-from skimage.filters import sobel
-import pandas as pd
-from pathlib import Path
-import cv2
-import pickle
-import numpy as np
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from skimage.filters import rank
-from scipy import ndimage as ndi
-from skimage.morphology import disk
-import sklearn.metrics
-import torch
-import torch.nn as nn
-from torchvision import datasets, transforms
-from torchvision.transforms import v2
-from torchvision import tv_tensors
-from torch.utils.data import DataLoader, random_split
-import torch.nn.functional as F
-import math
 import json
-from torch.utils.data import Dataset
-from config import *
-from model import *
-from metrics import *
-from losses import *
-from data import *
+import numpy as np
+import pandas as pd
+import torch
+from torchvision.transforms import v2
+from torch.utils.data import DataLoader, random_split
+
+from config import (Y_TRAIN_CSV, TRAIN_IMAGES_DIR, ANNOTATED_LABELS_JSON, MODELS_DIR, FIGURES_DIR, MODEL_PATH,
+                    N_ANNOTATED, TRAIN_VAL_SPLIT, AUG_DEGREES, AUG_SCALE, EPOCHS, LR, WEIGHT_DECAY,
+                    BATCH_SIZE_TRAIN, BATCH_SIZE_VAL, SPLIT_SEED, TORCH_SEED, device)
+from model import UnetCNN
+from losses import cross_entropy_modified
+from data import load_dataset, CTDataset
+from train import train
 
 ## LOADING DONNÉES
 
 
 
-labels_train = pd.read_csv("y_train.csv", index_col=0)
+labels_train = pd.read_csv(Y_TRAIN_CSV, index_col=0)
 
-data_dir = Path("./")
-data_train = load_dataset(data_dir / "train-images")
-data_test = load_dataset(data_dir / "test-images")
+data_train = load_dataset(TRAIN_IMAGES_DIR)
 
-with open("annotated_labels.json") as f :
+with open(ANNOTATED_LABELS_JSON) as f :
     L = json.load(f)
 
-L_1stphase = L[0:800]
+L_1stphase = L[0:N_ANNOTATED]
 
 masks = labels_train.values.T.astype(np.uint8).reshape(-1, 256, 256)
 del labels_train
 # --- Découpage des 800 images annotées
 
-transform = v2.RandomAffine(degrees = 15, scale=(0.7,1.4), fill = 0)
-fullNoT = CTDataset(data_train, masks, range(800), transform=None)
-fullT = CTDataset(data_train, masks, range(800), transform=transform)
-gen = torch.Generator().manual_seed(42)
-train_setnoT, val_set = random_split(fullNoT, [640,160], generator=gen)
+transform = v2.RandomAffine(degrees = AUG_DEGREES, scale=AUG_SCALE, fill = 0)
+fullNoT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=None)
+fullT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=transform)
+gen = torch.Generator().manual_seed(SPLIT_SEED)
+train_setnoT, val_set = random_split(fullNoT, TRAIN_VAL_SPLIT, generator=gen)
 
 train_set = CTDataset(data_train, masks, indices = train_setnoT.indices, transform = transform)
 
@@ -60,11 +44,15 @@ train_set = CTDataset(data_train, masks, indices = train_setnoT.indices, transfo
 
 
 
-train_loader = DataLoader(train_set, batch_size=8, shuffle=True)
-val_loader = DataLoader(val_set, batch_size=16, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=BATCH_SIZE_VAL, shuffle=False)
 
-torch.manual_seed(0)
+torch.manual_seed(TORCH_SEED)
 
 if __name__=="__main__" :
+    if MODEL_PATH.exists():
+        raise FileExistsError(f"{MODEL_PATH} existe déjà : change EXPERIMENT_NAME dans config.py pour ne pas l'écraser.")
+    MODELS_DIR.mkdir(exist_ok=True)
+    FIGURES_DIR.mkdir(exist_ok=True)
     model = UnetCNN()
-    train(model, train_loader, val_loader, cross_entropy_modified, L, device=device, epochs=100)
+    train(model, train_loader, val_loader, cross_entropy_modified, L, device=device, epochs=EPOCHS, lr=LR, wd=WEIGHT_DECAY)

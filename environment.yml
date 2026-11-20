@@ -1,0 +1,18 @@
+# Création : conda env create -f environment.yml
+# Activation : conda activate datachall_radium_2026
+name: datachall_raidium_2026
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - jupyter
+  - ipykernel
+  - pip:
+      - torch==2.5.1
+      - torchvision==0.20.1
+      - numpy==2.2.6
+      - pandas==2.3.3
+      - opencv-python==5.0.0.93
+      - matplotlib==3.10.9
+      - tqdm==4.70.0

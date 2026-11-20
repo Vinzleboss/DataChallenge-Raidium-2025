@@ -1,7 +1,9 @@
-# Données du challenge (trop lourdes / téléchargeables)
-train-images/
-test-images/
-train-images.zip
+# Données du challenge (lourdes / téléchargeables) : seul annotated_labels.json est versionné
+data/*
+!data/annotated_labels.json
+
+# Sorties générées (CSV de prédiction)
+outputs/
 *.csv
 
 # Python / macOS
