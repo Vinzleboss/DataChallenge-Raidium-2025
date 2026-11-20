@@ -1,4 +1,4 @@
-from Projet import *
+from main import *
 
 @torch.no_grad()
 def predict_test(model, images, device, batch_size=16):

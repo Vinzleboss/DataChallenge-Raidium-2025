@@ -1,4 +1,4 @@
-from Projet import *
+from main import *
 import matplotlib.image as mpimg
 Liste_indices = [[0 for i in range(NUM_CLASSES + 1)] for j in range(3)]
 
