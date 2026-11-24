@@ -27,6 +27,7 @@ def train(model, train_loader, val_loader, lossfunc,L, device='mps', epochs = 5,
             loss = lossfunc(logits, y, A_batch)
             opt.zero_grad()
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
             pbar.set_postfix(loss=f"{loss.item() : .3f}")
 

@@ -14,7 +14,7 @@ Y_TRAIN_CSV = DATA_DIR / "y_train.csv"
 ANNOTATED_LABELS_JSON = DATA_DIR / "annotated_labels.json"
 
 # --- Expérience : change ce nom avant chaque nouvel entraînement
-EXPERIMENT_NAME = "Best_Model"
+EXPERIMENT_NAME = "Model_Caneaux_double"
 MODEL_PATH = MODELS_DIR / f"{EXPERIMENT_NAME}.pt"
 CURVES_PATH = FIGURES_DIR / f"{EXPERIMENT_NAME}_courbes.png"
 
@@ -32,7 +32,7 @@ AUG_DEGREES = 15
 AUG_SCALE = (0.7, 1.4)
 
 # --- Entraînement
-EPOCHS = 100
+EPOCHS = 50
 LR = 1e-3
 WEIGHT_DECAY = 1e-4
 BATCH_SIZE_TRAIN = 8
@@ -40,4 +40,4 @@ BATCH_SIZE_VAL = 16
 SPLIT_SEED = 42
 TORCH_SEED = 0
 
-device = "mps" if torch.backends.mps.is_available() else "cpu"
+device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
