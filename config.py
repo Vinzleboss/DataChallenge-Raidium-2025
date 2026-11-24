@@ -32,7 +32,7 @@ AUG_DEGREES = 15
 AUG_SCALE = (0.7, 1.4)
 
 # --- Entraînement
-EPOCHS = 50
+EPOCHS = 100
 LR = 1e-3
 WEIGHT_DECAY = 1e-4
 BATCH_SIZE_TRAIN = 8
