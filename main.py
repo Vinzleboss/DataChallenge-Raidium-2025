@@ -30,13 +30,16 @@ masks = labels_train.values.T.astype(np.uint8).reshape(-1, 256, 256)
 del labels_train
 # --- Découpage des 800 images annotées
 
-transform = v2.RandomAffine(degrees = AUG_DEGREES, scale=AUG_SCALE, fill = 0)
+transform1 = v2.RandomAffine(degrees = AUG_DEGREES, scale=AUG_SCALE, fill = 0)
+transform2 = v2.RandomApply([v2.ColorJitter(brightness=(0.8,1.12), contrast=(0.8,1.15))], p = 0.5)
+transformtot = v2.Compose([transform1, 
+                           transform2,])
 fullNoT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=None)
-fullT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=transform)
+fullT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=transformtot)
 gen = torch.Generator().manual_seed(SPLIT_SEED)
 train_setnoT, val_set = random_split(fullNoT, TRAIN_VAL_SPLIT, generator=gen)
 
-train_set = CTDataset(data_train, masks, indices = train_setnoT.indices, transform = transform)
+train_set = CTDataset(data_train, masks, indices = train_setnoT.indices, transform = transformtot)
 
 
 
