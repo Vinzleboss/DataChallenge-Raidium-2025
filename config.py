@@ -14,17 +14,20 @@ Y_TRAIN_CSV = DATA_DIR / "y_train.csv"
 ANNOTATED_LABELS_JSON = DATA_DIR / "annotated_labels.json"
 
 # --- Expérience : change ce nom avant chaque nouvel entraînement
-EXPERIMENT_NAME = "Model_Caneaux_double"
+EXPERIMENT_NAME = "Model_dataset_tot"
 MODEL_PATH = MODELS_DIR / f"{EXPERIMENT_NAME}.pt"
 CURVES_PATH = FIGURES_DIR / f"{EXPERIMENT_NAME}_courbes.png"
+TEACHER_PATH = MODELS_DIR/f"Model_Caneaux_double.pt"
 
 # --- Prédiction
 PREDICTION_CSV = OUTPUTS_DIR / f"{EXPERIMENT_NAME}_y_test_pred.csv"
 VERIF_FIGURE = FIGURES_DIR / f"{EXPERIMENT_NAME}_verif_test.png"
+CONF = 0.90
 
 # --- Données
 NUM_CLASSES = 54
 N_ANNOTATED = 800
+N_ALL = 2000
 TRAIN_VAL_SPLIT = [640, 160]
 
 # --- Augmentation
