@@ -35,7 +35,6 @@ transform2 = v2.RandomApply([v2.ColorJitter(brightness=(0.8,1.12), contrast=(0.8
 transformtot = v2.Compose([transform1, 
                            transform2,])
 fullNoT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=None)
-fullT = CTDataset(data_train, masks, range(N_ANNOTATED), transform=transformtot)
 gen = torch.Generator().manual_seed(SPLIT_SEED)
 train_setnoT, val_set = random_split(fullNoT, TRAIN_VAL_SPLIT, generator=gen)
 
