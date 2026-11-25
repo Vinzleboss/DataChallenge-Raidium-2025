@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import torch
 from torchvision import tv_tensors
 from torch.utils.data import Dataset
+import pandas as pd
+from scipy import stats
 
 # Section Traitement des données
 
@@ -45,3 +47,37 @@ def plot_slice_seg(slice_image, seg):
     seg_masked = np.ma.masked_where(seg.reshape((256,256)) == 0, (seg.reshape((256,256))))
     axes[1].imshow(seg_masked, cmap="tab20")
     plt.axis("off")
+
+
+#On cherche les plages d'intensité pour plusieurs classes en vue de réaliser une nouvelle augmentation des données
+
+df = pd.read_csv(r'/Users/vincenzo/DataChallenge_Raidium/data/y_train.csv')
+pixels_par_classe = {c : {} for c in range(1,55)}
+
+for i in range(1, 55):
+    cols_valides = df.columns[(df == i).any()]
+    for col in cols_valides:
+        k = np.flatnonzero(df[col].values == i)        
+        pixels_par_classe[i][col] = np.stack([k // 256, k % 256], axis=1)
+
+
+def grayscale_per_class(pixs_par_classe, classe) :
+    pixs_imgs = pixs_par_classe[classe]
+    niveau = []
+    for img in pixs_imgs :
+        pixs = pixs_imgs[img]
+        arr = cv2.imread(f'/Users/vincenzo/DataChallenge_Raidium/data/train-images/{img}', cv2.IMREAD_GRAYSCALE)
+        n = len(pixs)
+        niv = 0
+        for j in range(len(pixs)):
+            niv += int(arr[pixs[j][0]][pixs[j][1]])
+        niveau.append(niv/n)
+
+    return niveau
+ 
+for i in range(1, 55):
+    niveau = grayscale_per_class(pixels_par_classe, i)
+    percentile = np.percentile(niveau, [5, 95])
+
+    print(f"Percentiles pour la classe {i} : {percentile}")
+
