@@ -7,7 +7,7 @@ from metrics import evaluate_dice
 
 # Section entraînement
 
-def train(model, train_loader, val_loader, lossfunc,L, device='mps', epochs = 5, lr = 1.4e-3, wd = 1e-4):
+def train(model, train_loader, val_loader, lossfunc,L, device='mps', epochs = 5, lr = 1e-3, wd = 1e-4):
     model.to(device)
     opt = torch.optim.AdamW(model.parameters(), lr = lr, weight_decay = wd)
     best,best_state = -math.inf, None
