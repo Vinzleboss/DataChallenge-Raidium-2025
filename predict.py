@@ -18,7 +18,7 @@ def predict_test(model, images, device, batch_size=16):
         x = torch.from_numpy(images[start:start + batch_size]).float().unsqueeze(1) / 255.0
         logits = model(x.to(device))
         preds.append(logits.argmax(dim=1).to(torch.uint8).cpu())
-    return torch.cat(preds).numpy()                     # (500, 256, 256)
+    return torch.cat(preds).numpy()                     
 
 # --- Recharger le meilleur modèle
 model = UnetCNN().to(device)

@@ -14,10 +14,10 @@ Y_TRAIN_CSV = DATA_DIR / "y_train.csv"
 ANNOTATED_LABELS_JSON = DATA_DIR / "annotated_labels.json"
 
 # --- Expérience : change ce nom avant chaque nouvel entraînement
-EXPERIMENT_NAME = "Model_dataset_tot"
+EXPERIMENT_NAME = "Model_dataset_tot2"
 MODEL_PATH = MODELS_DIR / f"{EXPERIMENT_NAME}.pt"
 CURVES_PATH = FIGURES_DIR / f"{EXPERIMENT_NAME}_courbes.png"
-TEACHER_PATH = MODELS_DIR/f"Model_Caneaux_double.pt"
+TEACHER_PATH = MODELS_DIR/f"Model_dataset_tot.pt"
 
 # --- Prédiction
 PREDICTION_CSV = OUTPUTS_DIR / f"{EXPERIMENT_NAME}_y_test_pred.csv"
@@ -38,7 +38,7 @@ AUG_SCALE = (0.7, 1.4)
 EPOCHS = 100
 LR = 1e-3
 WEIGHT_DECAY = 1e-4
-BATCH_SIZE_TRAIN = 8
+BATCH_SIZE_TRAIN = 16
 BATCH_SIZE_VAL = 16
 SPLIT_SEED = 42
 TORCH_SEED = 0
