@@ -10,7 +10,7 @@ from config import (Y_TRAIN_CSV, TRAIN_IMAGES_DIR, ANNOTATED_LABELS_JSON, MODELS
                     N_ANNOTATED, TRAIN_VAL_SPLIT, AUG_DEGREES, AUG_SCALE, EPOCHS, LR, WEIGHT_DECAY,
                     BATCH_SIZE_TRAIN, BATCH_SIZE_VAL, SPLIT_SEED, TORCH_SEED,CONF, TEACHER_PATH, N_ALL, device)
 from model import UnetCNN
-from losses import cross_entropy_modified
+from losses import cross_entropy_modified, CE_Modified_plus_DiceLoss
 from data import load_dataset, CTDataset
 from train import train
 from tqdm import tqdm
@@ -108,4 +108,4 @@ if __name__=="__main__" :
     FIGURES_DIR.mkdir(exist_ok=True)
     torch.manual_seed(TORCH_SEED)
     model = UnetCNN()
-    train(model, train_loader, val_loader, cross_entropy_modified, L, device=device, epochs=EPOCHS, lr=LR, wd=WEIGHT_DECAY)
+    train(model, train_loader, val_loader, CE_Modified_plus_DiceLoss, L, device=device, epochs=EPOCHS, lr=LR, wd=WEIGHT_DECAY)
