@@ -14,7 +14,7 @@ Y_TRAIN_CSV = DATA_DIR / "y_train.csv"
 ANNOTATED_LABELS_JSON = DATA_DIR / "annotated_labels.json"
 
 # --- Expérience : change ce nom avant chaque nouvel entraînement
-EXPERIMENT_NAME = "Model_with_dropout_and_partial_label"
+EXPERIMENT_NAME = "Model_with_dropoutaugment_and_partial_label"
 MODEL_PATH = MODELS_DIR / f"{EXPERIMENT_NAME}.pt"
 CURVES_PATH = FIGURES_DIR / f"{EXPERIMENT_NAME}_courbes.png"
 TEACHER_PATH = MODELS_DIR/f"Model_Caneaux_double.pt"
