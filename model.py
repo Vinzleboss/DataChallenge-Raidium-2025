@@ -65,7 +65,7 @@ class UnetCNN(nn.Module) :
             nn.BatchNorm2d(256 #128
                            ),
             nn.ReLU(inplace=True),
-            nn.Dropout2d(p=0.2),
+            nn.Dropout2d(p=0.5),
         )
 
         self.up1 = nn.Sequential(
